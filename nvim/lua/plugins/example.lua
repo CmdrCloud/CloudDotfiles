@@ -12,18 +12,14 @@ return {
   -- add gruvbox
   { "ellisonleao/gruvbox.nvim" },
 
-  { "catpuccin/nvim" },
-  lazy = false,
-  name = "catppuccin",
-
   -- Configure LazyVim to load gruvbox
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "catppuccin",
+      colorscheme = "ares",
     },
   },
-
+  -- change trouble config
   {
     "folke/trouble.nvim",
     -- opts will be merged with the parent spec
