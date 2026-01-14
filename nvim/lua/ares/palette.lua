@@ -3,19 +3,19 @@ local M = {}
 
 M.get = function()
   return {
-    bg = "#080808",
+    bg = "#010101",
     bg2 = "#0A0A0A",
-    fg = "#E8E8E2",
+    fg = "#CAD7DB",
     muted1 = "#6A6A6A",
-    muted2 = "#5B6C74",
+    muted2 = "#90A4AE",
     red = "#FD2700",
-    red_strong = "#DD2200",
-    red_strongest = "#FF0000",
-    orange = "#FF9F1C",
-    light_grey = "#D0DFE6",
-    off_white = "#E8E8E2",
+    red_strong = "#FF340B",
+    red_strongest = "#CC1010",
+    orange = "#FF724A",
+    light_grey = "#c1bfb5",
+    off_white = "#F4D5C7",
     yellow = "#FFCB68",
-    blue = "#6EE2FF",
+    blue = "#007B81",
   }
 end
 
