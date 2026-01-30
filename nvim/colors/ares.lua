@@ -40,7 +40,7 @@ set(0, "Normal", { fg = P.fg, bg = P.bg }) -- main text
 set(0, "NormalNC", { fg = P.muted, bg = P.bg2 }) -- non-current windows
 set(0, "CursorLine", { bg = "none" }) -- current line background
 set(0, "CursorColumn", { bg = P.bg2 })
-set(0, "CursorLineNr", { fg = P.red, bold = true }) -- current line number
+set(0, "CursorLineNr", { fg = P.red_strong }) -- current line number
 set(0, "LineNr", { fg = P.muted }) -- line numbers
 set(0, "SignColumn", { bg = P.bg }) -- gutter
 set(0, "FoldColumn", { bg = P.bg })
@@ -62,15 +62,22 @@ set(0, "FloatBorder", { fg = P.fg, bg = P.bg2 })
 set(0, "QuickFixLine", { link = "Normal" })
 set(0, "Folded", { bg = "#2e2e2e" })
 set(0, "Directory", { fg = P.fg })
+set(0, "Menu", { fg = P.fg, bg = P.bg })
 
--- Statusline / tabline / winbar
-set(0, "StatusLine", { fg = P.bg, bg = "#0a0a0a", bold = true })
-set(0, "StatusLineNC", { fg = P.fg, bg = P.muted })
-set(0, "StatusLineMode", { fg = P.fg, bg = P.red_strong }) -- mode block
+-- Statusline / tabline / winbar / mode
+set(0, "StatusLine", { fg = P.red_strong, bg = "#0a0a0a", bold = true })
+set(0, "StatusLineNC", { fg = P.fg, bg = "#0a0a0a" })
+set(0, "StatusLineMode", { fg = P.bg, bg = P.red_strong }) -- mode block
+set(0, "StatusLineGitBranch", { fg = P.orange, bg = P.bg2 })
 set(0, "TabLine", { fg = P.fg, bg = P.bg2 })
 set(0, "TabLineSel", { fg = P.bg, bg = P.red_strong })
 set(0, "WinBar", { fg = P.fg, bg = P.bg })
 set(0, "WinBarNC", { link = "Comment" })
+set(0, "Tooltip", { fg = P.red_light, bg = P.bg })
+set(0, "ModeMsg", { fg = P.red_bright, bg = P.bg })
+set(0, "MsgArea", { fg = P.red_bright, bg = P.bg })
+set(0, "lualine_a_visual", { fg = P.fg, bg = P.muted })
+set(0, "lualine_a_insert", { fg = P.bg, bg = P.red_bright })
 
 -- Basic syntax groups (what they affect)
 set(0, "Comment", { fg = P.muted, italic = true }) -- comments
@@ -159,7 +166,7 @@ set(0, "CmpItemAbbrMatchFuzzy", { fg = P.orange })
 set(0, "TelescopeNormal", { fg = P.fg, bg = P.bg2 })
 set(0, "TelescopeBorder", { fg = P.muted, bg = P.bg2 })
 set(0, "TelescopePromptNormal", { fg = P.fg, bg = P.bg2 })
-set(0, "TelescopePromptPrefix", { fg = P.red })
+set(0, "TelescopePromptPrefix", { fg = P.fg })
 set(0, "TelescopePromptTitle", { fg = P.bg, bg = P.red })
 set(0, "TelescopeResultsTitle", { fg = P.bg, bg = P.bg2 })
 
