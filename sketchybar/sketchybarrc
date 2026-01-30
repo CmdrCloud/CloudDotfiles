@@ -78,7 +78,7 @@ sketchybar --add bracket workspace_island $workspace_items \
                  background.border_color=0xff313244
 
 ##### Center - Front App Display #####
-sketchybar --add item front_app center \
+sketchybar --add item front_app left \
            --set front_app \
                  icon.drawing=off \
                  label.font="SF Pro:Semibold:13.0" \
