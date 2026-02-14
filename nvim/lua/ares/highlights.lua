@@ -9,7 +9,7 @@ M.setup = function(P)
   h("Normal", { fg = P.fg, bg = P.bg })
   h("NormalNC", { fg = P.muted1, bg = P.bg })
   h("LineNr", { fg = P.muted2 })
-  h("CursorLine", { bg = "none" })
+  h("CursorLine", { bg = "#202020" })
   h("CursorLineNr", { fg = P.red, bold = true })
 
   -- keywords / punctuation
