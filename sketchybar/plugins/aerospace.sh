@@ -1,27 +1,37 @@
 #!/bin/bash
 
-# Get the workspace ID from the argument
-WORKSPACE_ID=$1
+# Called with: aerospace.sh <workspace_id>
+# $NAME is set by sketchybar to the item name (e.g. space.1)
 
-# Check if this workspace is currently focused
-if [ "$($AEROSPACE_FOCUSED_WORKSPACE)" == "$WORKSPACE_ID" ]; then
-  # Active workspace - highlight it
-  sketchybar --set space.$WORKSPACE_ID \
+FOCUSED=$(aerospace list-workspaces --focused)
+
+if [ "$1" = "$FOCUSED" ]; then
+  # Active workspace — Catppuccin Mauve pill
+  sketchybar --set "$NAME" \
     background.drawing=on \
-    background.color=0xff89b4fa \
-    label.color=0xff1e1e2e
+    background.color=0xffcba6f7 \
+    background.corner_radius=8 \
+    background.height=26 \
+    label.color=0xff1e1e2e \
+    label.font="SF Pro Rounded:Bold:12.0"
 else
-  # Check if workspace has windows
-  if aerospace list-windows --workspace "$WORKSPACE_ID" | grep -q .; then
-    # Has windows - show as occupied
-    sketchybar --set space.$WORKSPACE_ID \
+  # Check if workspace has any windows
+  WINDOW_COUNT=$(aerospace list-windows --workspace "$1" 2>/dev/null | wc -l | tr -d ' ')
+
+  if [ "$WINDOW_COUNT" -gt 0 ]; then
+    # Occupied but not focused — subtle Surface0 pill
+    sketchybar --set "$NAME" \
       background.drawing=on \
-      background.color=0xff45475a \
-      label.color=0xffffffff
+      background.color=0xff313244 \
+      background.corner_radius=8 \
+      background.height=26 \
+      label.color=0xffbac2de \
+      label.font="SF Pro Rounded:Semibold:12.0"
   else
-    # Empty workspace
-    sketchybar --set space.$WORKSPACE_ID \
+    # Empty workspace — invisible, just a dot-like dim label
+    sketchybar --set "$NAME" \
       background.drawing=off \
-      label.color=0xff6c7086
+      label.color=0xff585b70 \
+      label.font="SF Pro Rounded:Regular:11.0"
   fi
 fi
