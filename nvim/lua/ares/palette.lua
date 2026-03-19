@@ -1,6 +1,8 @@
 -- ~/.config/nvim/lua/ares/palette.lua
 local M = {}
 
+-- test
+
 M.get = function()
   return {
     bg = "#161618",
