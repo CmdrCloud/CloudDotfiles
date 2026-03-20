@@ -13,7 +13,9 @@ if [ "$1" = "$FOCUSED" ]; then
     background.corner_radius=8 \
     background.height=26 \
     label.color=0xff1e1e2e \
-    label.font="SF Pro Rounded:Bold:12.0"
+    label.font="CaskaydiaCove Nerd Font Mono:Bold:11.0" \
+    label.align="center" \
+    icon.align="center"
 else
   # Check if workspace has any windows
   WINDOW_COUNT=$(aerospace list-windows --workspace "$1" 2>/dev/null | wc -l | tr -d ' ')
@@ -26,12 +28,12 @@ else
       background.corner_radius=8 \
       background.height=26 \
       label.color=0xffbac2de \
-      label.font="SF Pro Rounded:Semibold:12.0"
+      label.font="CaskaydiaCove Nerd Font Mono:Semibold:12.0"
   else
     # Empty workspace — invisible, just a dot-like dim label
     sketchybar --set "$NAME" \
       background.drawing=off \
       label.color=0xff585b70 \
-      label.font="SF Pro Rounded:Regular:11.0"
+      label.font="CaskaydiaCove Nerd Font Mono:Regular:11.0"
   fi
 fi
