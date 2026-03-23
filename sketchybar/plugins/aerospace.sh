@@ -40,7 +40,7 @@ if [ "$1" = "$FOCUSED" ]; then
   fi
 
   sketchybar --animate tanh 20 --set "$NAME" \
-    background.color=0xaaffffff \
+    background.color=0xeeffffff \
     background.height=20 \
     background.corner_radius=20 \
     padding_left=12 \
