@@ -28,10 +28,10 @@ if [ "$1" = "$FOCUSED" ]; then
       IDX=$((FROM + STEP))
       while [ "$IDX" -ne "$TO" ]; do
         MID="${ALL[$IDX]}"
-        sketchybar --animate tanh 6 --set "space.$MID" \
+        sketchybar --animate tanh 4 --set "space.$MID" \
           background.color=0x88ffffff \
           background.height=20
-        sketchybar --animate tanh 6 --set "space.$MID" \
+        sketchybar --animate tanh 4 --set "space.$MID" \
           background.color=0x00ffffff \
           background.height=20
         IDX=$((IDX + STEP))
@@ -39,7 +39,7 @@ if [ "$1" = "$FOCUSED" ]; then
     fi
   fi
 
-  sketchybar --animate tanh 20 --set "$NAME" \
+  sketchybar --animate tanh 15 --set "$NAME" \
     background.color=0xeeffffff \
     background.height=20 \
     background.corner_radius=20 \
