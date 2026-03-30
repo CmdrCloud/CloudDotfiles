@@ -16,7 +16,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "ares",
+      colorscheme = "gruvbox",
     },
   },
   -- change trouble config
