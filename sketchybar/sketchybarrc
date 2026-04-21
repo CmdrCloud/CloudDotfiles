@@ -1,5 +1,12 @@
 #!/bin/bash
 
+source "$HOME/.config/sketchybar/colors.sh"
+
+bar=(
+  color=$BASE
+  border_color=$SURFACE1
+)
+
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar ################################################################
@@ -32,26 +39,30 @@ sketchybar --default \
 #  LEFT — Workspace dots  (subtle transparent pill)
 # ════════════════════════════════════════════════════════
 
-sketchybar --add event aerospace_workspace_change
+# yabai spaces
+SPACE_LABELS=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
 
-for sid in $(aerospace list-workspaces --all); do
+for i in "${!SPACE_LABELS[@]}"; do
+  sid=$((i + 1))
   sketchybar --add item space.$sid left \
-    --subscribe space.$sid aerospace_workspace_change \
     --set space.$sid \
+    associated_space=$sid \
     icon.drawing=off \
-    label.drawing=off \
+    label="${SPACE_LABELS[$i]}" \
+    label.font="CaskaydiaCove Nerd Font Mono:Bold:12.0" \
+    label.color=0xffcdd6f4 \
     width=16 \
     background.drawing=on \
     background.color=0xdd192022 \
     background.height=35 \
     background.corner_radius=12 \
-    click_script="aerospace workspace $sid" \
-    script="$CONFIG_DIR/plugins/aerospace.sh $sid"
+    click_script="yabai -m space --focus $sid" \
+    script="$CONFIG_DIR/plugins/space.sh" \
+    --subscribe space.$sid space_change mouse.clicked
 done
 
-# A very subtle frosted container for the dots only
-workspace_items=$(aerospace list-workspaces --all | sed 's/^/space./' | tr '\n' ' ')
-sketchybar --add bracket workspace_island $workspace_items \
+sketchybar --add bracket workspace_island \
+  space.1 space.2 space.3 space.4 space.5 \
   --set workspace_island \
   background.color=0xdd192022 \
   background.corner_radius=10 \

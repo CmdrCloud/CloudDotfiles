@@ -1,45 +1,49 @@
-# focus windows (arrow keys)
+# --- FOCUS WINDOWS ---
 alt - right : yabai -m window --focus east
 alt - left  : yabai -m window --focus west
 alt - down  : yabai -m window --focus south
 alt - up    : yabai -m window --focus north
 
-# move windows
+# --- MOVE (WARP) WINDOWS within space ---
 shift + alt - right : yabai -m window --warp east
 shift + alt - left  : yabai -m window --warp west
 shift + alt - down  : yabai -m window --warp south
 shift + alt - up    : yabai -m window --warp north
 
-# --- WORKSPACES (SPACES) ---
-
-# move window to next/prev space and follow it
-alt + cmd - right : yabai -m window --space next; yabai -m space --focus next
-alt + cmd - left  : yabai -m window --space prev; yabai -m space --focus prev
-
+# --- WORKSPACES ---
+# move window to space and follow it  (use cmd + alt to avoid conflict)
+cmd + ctrl - right : yabai -m window --space next; yabai -m space --focus next
+cmd + ctrl - left  : yabai -m window --space prev; yabai -m space --focus prev
 
 # focus next/prev space
 ctrl + alt - right : yabai -m space --focus next
 ctrl + alt - left  : yabai -m space --focus prev
 
-
 # --- WINDOW STATES ---
+# toggle native fullscreen (this is the real fullscreen, not just zoom)
+alt - return : yabai -m window --toggle native-fullscreen
+# toggle float + center window
+alt - m : yabai -m window --toggle float;\
+          yabai -m window --grid 4:4:1:1:2:2
 
-# toggle fullscreen (native macOS fullscreen)
-alt - return : yabai -m window --toggle zoom-fullscreen
-
-# toggle float
-alt - space : yabai -m window --toggle float
-
-
-# --- RESIZE ---
-
-# resize horizontally (adjust amount if needed)
-ctrl + alt + cmd - right : yabai -m window --resize right:50:0
-ctrl + alt + cmd - left  : yabai -m window --resize left:-50:0
-
+# --- RESIZE (using mouse-free approach) ---
+# grow/shrink left-right
+shift + ctrl - right : yabai -m window --resize right:50:0; \
+                       yabai -m window --resize left:-50:0
+shift + ctrl - left  : yabai -m window --resize right:-50:0; \
+                       yabai -m window --resize left:50:0
+# grow/shrink up-down
+shift + ctrl - up    : yabai -m window --resize top:-50:0; \
+                       yabai -m window --resize bottom:50:0
+shift + ctrl - down  : yabai -m window --resize top:50:0; \
+                       yabai -m window --resize bottom:-50:0
 
 # --- LAYOUT ---
+alt - e : yabai -m space --balance
 
-# balance / equalize windows
-alt + cmd - h : yabai -m space --balance
-
+# --- OPEN APPS ---
+alt - s: open -a "Spotify"
+alt - t: open -a "Kitty"
+alt - w: open -a "WhatsApp"
+alt - f: open -a "Firefox"
+alt - z: open -a "Zed"
