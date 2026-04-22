@@ -12,8 +12,8 @@ yabai -m config left_padding 10
 yabai -m config right_padding 10
 
 yabai -m config window_opacity on
-yabai -m config active_window_opacity 0.9
-yabai -m config normal_window_opacity 0.9
+yabai -m config active_window_opacity 0.95
+yabai -m config normal_window_opacity 0.95
 yabai -m config window_shadow off
 
 # this is what actually removes title bars (requires SA)
