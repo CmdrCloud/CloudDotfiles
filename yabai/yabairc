@@ -36,3 +36,6 @@ yabai -m space 3 --label three
 yabai -m space 4 --label four
 yabai -m space 5 --label five
 yabai -m space 6 --label six
+
+# --- Animations ---
+yabai -m config window_animation_duration 0.25

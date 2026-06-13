@@ -1,10 +1,10 @@
 #!/bin/bash
 if [ "$SELECTED" = "true" ]; then
   sketchybar --set $NAME \
-    background.color=0xff89b4fa \
-    label.color=0xff1e1e2e
+    icon.color=0xffcdd6f4 \
+    label.color=0xffcdd6f4
 else
   sketchybar --set $NAME \
-    background.color=0xdd192022 \
-    label.color=0xffcdd6f4
+    icon.color=0x996c7086 \
+    label.color=0x996c7086
 fi
