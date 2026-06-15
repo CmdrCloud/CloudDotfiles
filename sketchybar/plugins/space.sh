@@ -1,10 +1,7 @@
 #!/bin/bash
-if [ "$SELECTED" = "true" ]; then
-  sketchybar --set $NAME \
-    icon.color=0xffcdd6f4 \
-    label.color=0xffcdd6f4
+SID=$(yabai -m query --spaces --space | jq -r '.index')
+if [ "${NAME#space.}" = "$SID" ]; then
+  sketchybar --set $NAME icon.color=0xddffffff
 else
-  sketchybar --set $NAME \
-    icon.color=0x996c7086 \
-    label.color=0x996c7086
+  sketchybar --set $NAME icon.color=0xaa6c7086
 fi

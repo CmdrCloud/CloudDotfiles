@@ -36,26 +36,18 @@ sketchybar --default \
   icon.y_offset=0
 
 # ════════════════════════════════════════════════════════
-#  LEFT — Workspaces  (dot + icon)
+#  LEFT — Workspace dots (pill island)
 # ════════════════════════════════════════════════════════
 
-SPACE_ICONS=("" "" "" "" "" "")
-
-for i in "${!SPACE_ICONS[@]}"; do
-  sid=$((i + 1))
+for sid in 1 2 3 4 5 6; do
   sketchybar --add item space.$sid left \
     --set space.$sid \
-    associated_space=$sid \
-    icon="●" \
-    icon.font="CaskaydiaCove Nerd Font Mono:Bold:10.0" \
-    icon.color=0x996c7086 \
-    icon.padding_right=0 \
-    icon.padding_left=6 \
-    label="${SPACE_ICONS[$i]}" \
-    label.font="CaskaydiaCove Nerd Font Mono:Bold:14.0" \
-    label.color=0x996c7086 \
-    label.padding_left=2 \
-    label.padding_right=6 \
+    icon="•" \
+    icon.font="CaskaydiaCove Nerd Font Mono:Bold:55.0" \
+    icon.color=0xaa6c7086 \
+    icon.padding_left=0 \
+    icon.padding_right=7 \
+    label.drawing=off \
     background.drawing=off \
     click_script="yabai -m space --focus $sid" \
     script="$CONFIG_DIR/plugins/space.sh" \
@@ -63,26 +55,17 @@ for i in "${!SPACE_ICONS[@]}"; do
 done
 
 sketchybar --add bracket workspace_island \
-  space.1 space.2 space.3 space.4 space.5 space.6 \
+  space.1 space.2 space.3 space.4 space.5 space.6 space.7 \
   --set workspace_island \
+  background.drawing=on \
   background.color=0xdd192022 \
-  background.corner_radius=10 \
-  background.height=35
+  background.height=35 \
+  background.corner_radius=12 \
+  padding_right=12
 
 # ════════════════════════════════════════════════════════
-#  LEFT — Front app  (plain floating text, separator)
+#  LEFT — Front app (directly right of workspace island)
 # ════════════════════════════════════════════════════════
-
-# Thin vertical separator between workspaces and app name
-sketchybar --add item app_sep left \
-  --set app_sep \
-  icon.drawing=off \
-  label="│" \
-  label.color=0x00ffffff \
-  label.font="CaskaydiaCove Nerd Font Mono:Semibold:14.0" \
-  padding_left=12 \
-  padding_right=12 \
-  background.drawing=off
 
 sketchybar --add item front_app left \
   --set front_app \
