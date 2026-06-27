@@ -108,6 +108,20 @@ COLORSEOF
   fi
 }
 
+apply_macos_appearance() {
+  local theme="$1"
+  case "$theme" in
+    catppuccin-mocha)
+      osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true' 2>/dev/null
+      echo "  • macOS appearance: dark mode"
+      ;;
+    catppuccin-latte)
+      osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to false' 2>/dev/null
+      echo "  • macOS appearance: light mode"
+      ;;
+  esac
+}
+
 switch_theme() {
   local theme="$1"
   local theme_file="$THEMES_DIR/$theme.json"
@@ -127,6 +141,7 @@ switch_theme() {
   apply_kitty "$theme"
   apply_nushell "$theme"
   apply_sketchybar "$theme"
+  apply_macos_appearance "$theme"
 
   echo ""
   echo "done."

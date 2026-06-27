@@ -309,6 +309,28 @@ main {
   100% { background: var(--surface0); border-color: var(--surface1); }
 }
 
+/* --- App tiles --- */
+.grid--apps { margin-top: 20px; }
+.grid__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--overlay0);
+  margin-top: 12px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.tile--app {
+  border-color: var(--surface0);
+  background: var(--mantle);
+  min-height: 64px;
+}
+.tile--app:hover {
+  border-color: var(--mauve);
+  background: var(--surface0);
+}
+.tile--app .tile__icon { font-size: 1.2rem; }
+
 /* --- Responsive --- */
 @media (max-width: 640px) {
   .clock { font-size: 3rem; }
@@ -367,6 +389,11 @@ main {
   <div class="grid-section">
     <div class="grid" id="bookmark-grid"></div>
   </div>
+
+  <div class="grid-section">
+    <div class="grid__label">launch</div>
+    <div class="grid grid--apps" id="app-grid"></div>
+  </div>
 </main>
 
 <!-- Bottom statusline -->
@@ -402,16 +429,27 @@ const bookmarks = [
   { label: 'Meet',      icon: '',  url: 'https://meet.google.com/landing' },
 ];
 
-// --- Render grid ---
-function renderGrid() {
-  const grid = document.getElementById('bookmark-grid');
+const apps = [
+  { label: 'WhatsApp',     icon: '', url: 'whatsapp://' },
+  { label: 'Discord',       icon: '', url: 'discord://' },
+  { label: 'Obsidian',     icon: '', url: 'obsidian://open' },
+  { label: 'Kitty',        icon: '', url: 'x-launch://open?app=Kitty' },
+  { label: 'Firefox',      icon: '', url: 'x-launch://open?app=Firefox' },
+  { label: 'Zed',          icon: '', url: 'x-launch://open?app=Zed' },
+  { label: 'djay Pro',     icon: '', url: 'x-launch://open?app=djay%20Pro' },
+  { label: 'Finder',       icon: '', url: 'x-launch://open?app=Finder' },
+  { label: 'Settings',     icon: '', url: 'x-apple.systempreferences:com.apple.preferences' },
+];
+
+// --- Render grids ---
+function renderGrid(containerId, items, isApp) {
+  const grid = document.getElementById(containerId);
   grid.innerHTML = '';
-  bookmarks.forEach((b) => {
+  items.forEach((b) => {
     const a = document.createElement('a');
-    a.className = 'tile';
+    a.className = 'tile' + (isApp ? ' tile--app' : '');
     a.href = b.url;
-    a.target = '_blank';
-    a.rel = 'noopener';
+    if (!isApp) { a.target = '_blank'; a.rel = 'noopener'; }
     a.dataset.label = b.label;
     if (b.key) a.dataset.key = b.key;
     if (b.key) {
@@ -431,12 +469,18 @@ function renderGrid() {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       flashTile(a);
-      setTimeout(() => window.open(b.url, '_blank'), 80);
+      const url = b.url;
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        setTimeout(() => window.open(url, '_blank'), 80);
+      } else {
+        setTimeout(() => { window.location.href = url; }, 80);
+      }
     });
     grid.appendChild(a);
   });
 }
-renderGrid();
+renderGrid('bookmark-grid', bookmarks, false);
+renderGrid('app-grid', apps, true);
 
 function flashTile(el) {
   el.classList.remove('tile--flash');

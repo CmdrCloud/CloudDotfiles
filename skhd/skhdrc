@@ -50,3 +50,6 @@ alt - z: open -a "Zed"
 
 # --- THEME SWITCHER ---
 alt - x : $HOME/.config/theme-switcher/bin/theme-switch toggle
+
+# --- START PAGE ---
+alt - h : open -a "Firefox" "file:///Users/andreas/.config/firefox-start/index.html"
