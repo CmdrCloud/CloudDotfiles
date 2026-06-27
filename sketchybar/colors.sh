@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Catppuccin Mocha
+# Catppuccin mocha
 export BLACK=0xff1e1e2e
 export WHITE=0xffcdd6f4
 export RED=0xfff38ba8

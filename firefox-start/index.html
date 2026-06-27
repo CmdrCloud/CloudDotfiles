@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>start</title>
+<style>
+:root {
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+  --text: #cdd6f4;
+  --subtext1: #bac2de;
+  --subtext0: #a6adc8;
+  --overlay2: #9399b2;
+  --overlay1: #7f849c;
+  --overlay0: #6c7086;
+  --surface2: #585b70;
+  --surface1: #45475a;
+  --surface0: #313244;
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --crust: #11111b;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 14px; }
+
+body {
+  font-family: 'CaskaydiaCove Nerd Font Mono', 'JetBrainsMono Nerd Font', 'Fira Code', 'Source Code Pro', monospace;
+  background: var(--base);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* --- Scanline / grain overlay --- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+}
+
+/* --- Glow blobs --- */
+.glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.glow--tl {
+  width: 400px; height: 400px;
+  background: var(--mauve);
+  opacity: 0.08;
+  top: -150px; left: -150px;
+}
+.glow--br {
+  width: 500px; height: 500px;
+  background: var(--blue);
+  opacity: 0.06;
+  bottom: -200px; right: -200px;
+}
+
+/* --- Statuslines --- */
+.statusline {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--surface0);
+  background: var(--mantle);
+  z-index: 1;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.statusline--bottom {
+  border-bottom: none;
+  border-top: 1px solid var(--surface0);
+  margin-top: auto;
+}
+.statusline__section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.statusline__sep {
+  color: var(--surface2);
+  font-weight: bold;
+}
+.statusline__tag {
+  background: var(--surface0);
+  color: var(--mauve);
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.statusline__user {
+  color: var(--green);
+}
+.statusline__cursor {
+  display: inline-block;
+  width: 8px; height: 1.1em;
+  background: var(--green);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.statusline__right {
+  margin-left: auto;
+  display: flex;
+  gap: 16px;
+  color: var(--overlay1);
+}
+.statusline__indicator {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.statusline__indicator--online {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+
+/* --- Main --- */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  z-index: 1;
+  animation: fadeIn 0.6s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wordmark {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: var(--overlay0);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  user-select: none;
+  animation: fadeIn 0.6s ease-out 0.1s both;
+}
+.wordmark span { color: var(--mauve); }
+
+/* --- Clock section --- */
+.clock-section {
+  text-align: center;
+  margin-bottom: 28px;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+.clock {
+  font-size: 4.5rem;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.clock__seconds {
+  font-size: 2rem;
+  color: var(--overlay1);
+  vertical-align: super;
+}
+.greeting {
+  font-size: 1.1rem;
+  color: var(--subtext0);
+  margin-bottom: 4px;
+}
+.greeting span { color: var(--mauve); font-weight: bold; }
+.date-line {
+  font-size: 0.85rem;
+  color: var(--overlay1);
+}
+
+/* --- Search --- */
+.search-section {
+  width: 100%;
+  max-width: 560px;
+  margin-bottom: 34px;
+  animation: fadeIn 0.6s ease-out 0.3s both;
+}
+.search-form { position: relative; }
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--mantle);
+  border: 1px solid var(--surface1);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input:focus {
+  border-color: var(--mauve);
+  box-shadow: 0 0 0 2px rgba(203,166,247,0.15);
+}
+.search-input::placeholder { color: var(--overlay0); }
+.search-hint {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: var(--overlay0);
+  background: var(--surface0);
+  padding: 2px 6px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+/* --- Bookmark grid --- */
+.grid-section {
+  width: 100%;
+  max-width: 700px;
+  animation: fadeIn 0.6s ease-out 0.4s both;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  background: var(--surface0);
+  border: 1px solid var(--surface1);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  cursor: pointer;
+  position: relative;
+  min-height: 80px;
+}
+.tile:hover {
+  background: var(--surface1);
+  border-color: var(--overlay0);
+  transform: translateY(-2px);
+}
+.tile:active { transform: translateY(0); }
+.tile__key {
+  position: absolute;
+  top: 4px; left: 6px;
+  font-size: 0.65rem;
+  color: var(--overlay0);
+  background: var(--mantle);
+  padding: 0 4px;
+  border-radius: 2px;
+}
+.tile__icon {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+.tile__label {
+  font-size: 0.8rem;
+  color: var(--subtext1);
+  text-align: center;
+  word-break: break-all;
+}
+.tile--flash {
+  animation: tileFlash 0.2s ease-out;
+}
+@keyframes tileFlash {
+  0%   { background: var(--mauve); border-color: var(--mauve); }
+  100% { background: var(--surface0); border-color: var(--surface1); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 640px) {
+  .clock { font-size: 3rem; }
+  .clock__seconds { font-size: 1.4rem; }
+  .wordmark { font-size: 1.6rem; letter-spacing: 4px; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .statusline { font-size: 0.75rem; padding: 6px 10px; gap: 8px; }
+  .statusline__right { gap: 8px; }
+}
+@media (max-width: 400px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="glow glow--tl"></div>
+<div class="glow glow--br"></div>
+
+<!-- Top statusline -->
+<div class="statusline">
+  <div class="statusline__section">
+    <span class="statusline__tag">nu</span>
+  </div>
+  <div class="statusline__section">
+    <span class="statusline__user">andreas</span>
+    <span class="statusline__cursor"></span>
+  </div>
+  <div class="statusline__right">
+    <span id="uptime-display">up 0m</span>
+    <span id="utc-clock">00:00:00</span>
+    <span class="statusline__sep">|</span>
+    <span>STATUS</span>
+    <span class="statusline__indicator statusline__indicator--online"></span>
+  </div>
+</div>
+
+<main>
+  <div class="wordmark">ter<span>m</span>inal</div>
+
+  <div class="clock-section">
+    <div class="clock">
+      <span id="clock-hours">00</span>:<span id="clock-minutes">00</span><span class="clock__seconds" id="clock-seconds">00</span>
+    </div>
+    <div class="greeting"><span id="greeting-text">hello</span>, <span id="user-name">andreas</span>.</div>
+    <div class="date-line" id="date-line">-- · -- --- ---- · ISO week --</div>
+  </div>
+
+  <div class="search-section">
+    <form class="search-form" action="https://duckduckgo.com/" method="get" target="_blank">
+      <input class="search-input" type="text" name="q" id="search-input" placeholder="search or type a URL..." autofocus>
+      <span class="search-hint">/</span>
+    </form>
+  </div>
+
+  <div class="grid-section">
+    <div class="grid" id="bookmark-grid"></div>
+  </div>
+</main>
+
+<!-- Bottom statusline -->
+<div class="statusline statusline--bottom">
+  <div class="statusline__section">
+    <span class="statusline__tag">nu</span>
+    <span id="theme-label" style="color:var(--mauve);">catppuccin-mocha</span>
+  </div>
+  <div class="statusline__right">
+    <span>READY</span>
+    <span class="statusline__sep">|</span>
+    <span>ONLINE</span>
+    <span class="statusline__indicator statusline__indicator--online"></span>
+  </div>
+</div>
+
+<script>
+// --- Bookmarks ---
+const bookmarks = [
+  { key: '1', label: 'YouTube',    icon: '',  url: 'https://www.youtube.com/' },
+  { key: '2', label: 'Instagram',  icon: '',  url: 'https://instagram.com' },
+  { key: '3', label: 'ML',         icon: '',   url: 'https://the-palindrome.github.io/ml-knowledge-graph/' },
+  { key: '4', label: 'AI-Engineer',icon: '', url: 'https://roadmap.sh/ai-engineer' },
+  { key: '5', label: 'GitHub',     icon: '',  url: 'https://github.com/CmdrCloud/' },
+  { key: '6', label: 'Claude',     icon: '',   url: 'https://claude.ai/' },
+  { key: '7', label: 'Drive',      icon: '',   url: 'https://drive.google.com/drive/u/0/home' },
+  { key: '8', label: 'Uni',        icon: '',   url: 'https://campusvirtual.utepsa.edu/moodle/' },
+  { key: '9', label: 'Miruro',     icon: '',   url: 'https://www.miruro.to' },
+  { key: '0', label: 'Cineby',     icon: '',   url: 'https://www.cineby.at/' },
+  { key: '-', label: 'ILovePDF',   icon: '',  url: 'https://www.ilovepdf.com/' },
+  { key: '=', label: 'Chess',      icon: '',   url: 'https://chess.com' },
+  { label: 'Game',      icon: '',  url: 'https://princechazz.com/' },
+  { label: 'Meet',      icon: '',  url: 'https://meet.google.com/landing' },
+];
+
+// --- Render grid ---
+function renderGrid() {
+  const grid = document.getElementById('bookmark-grid');
+  grid.innerHTML = '';
+  bookmarks.forEach((b) => {
+    const a = document.createElement('a');
+    a.className = 'tile';
+    a.href = b.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.dataset.label = b.label;
+    if (b.key) a.dataset.key = b.key;
+    if (b.key) {
+      const k = document.createElement('span');
+      k.className = 'tile__key';
+      k.textContent = b.key;
+      a.appendChild(k);
+    }
+    const icon = document.createElement('div');
+    icon.className = 'tile__icon';
+    icon.textContent = b.icon;
+    a.appendChild(icon);
+    const label = document.createElement('div');
+    label.className = 'tile__label';
+    label.textContent = b.label;
+    a.appendChild(label);
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      flashTile(a);
+      setTimeout(() => window.open(b.url, '_blank'), 80);
+    });
+    grid.appendChild(a);
+  });
+}
+renderGrid();
+
+function flashTile(el) {
+  el.classList.remove('tile--flash');
+  void el.offsetWidth;
+  el.classList.add('tile--flash');
+}
+
+// --- Keyboard shortcuts ---
+const searchInput = document.getElementById('search-input');
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+    if (e.key === 'Escape') {
+      e.target.blur();
+      e.target.value = '';
+    }
+    return;
+  }
+  if (e.key === '/') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+    return;
+  }
+  const key = e.key;
+  const validKeys = ['1','2','3','4','5','6','7','8','9','0','-','='];
+  if (validKeys.includes(key)) {
+    const tile = document.querySelector(`.tile[data-key="${key}"]`);
+    if (tile) {
+      e.preventDefault();
+      flashTile(tile);
+      setTimeout(() => tile.click(), 80);
+    }
+  }
+});
+
+// --- Live clock ---
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('clock-hours').textContent = h;
+  document.getElementById('clock-minutes').textContent = m;
+  document.getElementById('clock-seconds').textContent = s;
+
+  const utc = new Date();
+  const uth = String(utc.getUTCHours()).padStart(2, '0');
+  const utm = String(utc.getUTCMinutes()).padStart(2, '0');
+  const uts = String(utc.getUTCSeconds()).padStart(2, '0');
+  document.getElementById('utc-clock').textContent = `${uth}:${utm}:${uts}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// --- Greeting ---
+function updateGreeting() {
+  const h = new Date().getHours();
+  let greeting = 'good evening';
+  if (h >= 5 && h < 12) greeting = 'good morning';
+  else if (h >= 12 && h < 17) greeting = 'good afternoon';
+  document.getElementById('greeting-text').textContent = greeting;
+}
+updateGreeting();
+
+// --- Date line ---
+function updateDate() {
+  const now = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dow = days[now.getDay()];
+  const day = now.getDate();
+  const month = months[now.getMonth()];
+  const year = now.getFullYear();
+
+  // ISO week number
+  const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+
+  document.getElementById('date-line').textContent =
+    `${dow} · ${day} ${month} ${year} · ISO week ${weekNo}`;
+}
+updateDate();
+
+// --- Uptime ---
+function updateUptime() {
+  // Use performance.now() as a relative uptime since page load
+  const sec = Math.floor(performance.now() / 1000);
+  const min = Math.floor(sec / 60);
+  const hrs = Math.floor(min / 60);
+  if (hrs > 0) {
+    document.getElementById('uptime-display').textContent = `up ${hrs}h ${min % 60}m`;
+  } else if (min > 0) {
+    document.getElementById('uptime-display').textContent = `up ${min}m ${sec % 60}s`;
+  } else {
+    document.getElementById('uptime-display').textContent = `up ${sec}s`;
+  }
+}
+setInterval(updateUptime, 1000);
+updateUptime();
+</script>
+</body>
+</html>

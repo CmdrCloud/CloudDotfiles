@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SWITCHER_DIR="$HOME/.config/theme-switcher"
+THEMES_DIR="$SWITCHER_DIR/themes"
+CURRENT_FILE="$SWITCHER_DIR/current"
+STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+KITTY_CONFIG="$HOME/.config/kitty/kitty.conf"
+NUSHELL_CONFIG="$HOME/Library/Application Support/nushell/config.nu"
+SKETCHYBAR_COLORS="$HOME/.config/sketchybar/colors.sh"
+
+usage() {
+  echo "usage: theme-switch <theme-name>"
+  echo "       theme-switch toggle"
+  echo ""
+  echo "available themes:"
+  for f in "$THEMES_DIR"/*.json; do
+    name=$(basename "$f" .json)
+    marker=""
+    [ "$(cat "$CURRENT_FILE")" = "$name" ] && marker="  ← active"
+    echo "  $name$marker"
+  done
+  exit 0
+}
+
+apply_starship() {
+  local theme="$1"
+  # starship palette names use underscores
+  local palette_name="${theme//-/_}"
+  if grep -q "^palette = \"$palette_name\"" "$STARSHIP_CONFIG" 2>/dev/null; then
+    return 0
+  fi
+  sed -i.bak -E "s/^palette = \".+\"/palette = \"$palette_name\"/" "$STARSHIP_CONFIG"
+  echo "  • Starship: palette → $palette_name (instant — next prompt)"
+}
+
+apply_kitty() {
+  local theme="$1"
+  local kitty_theme="${theme}.conf"
+  if grep -q "^include $kitty_theme" "$KITTY_CONFIG" 2>/dev/null; then
+    return 0
+  fi
+  sed -i.bak -E "s/^include .+\.conf$/include $kitty_theme/" "$KITTY_CONFIG"
+  echo "  • Kitty: theme → $kitty_theme (live-reloads automatically)"
+}
+
+apply_nushell() {
+  local theme="$1"
+  # Nushell theme files use underscores, not hyphens
+  local nu_theme="${theme//-/_}.nu"
+  if grep -q "source .*${nu_theme}" "$NUSHELL_CONFIG" 2>/dev/null; then
+    return 0
+  fi
+  sed -i.bak -E "s|(source .*)catppuccin_[a-z]+\.nu|\1${nu_theme}|" "$NUSHELL_CONFIG"
+  echo "  • Nushell: color_config → $nu_theme (new shell/tab to see change)"
+}
+
+apply_sketchybar() {
+  local theme_file="$THEMES_DIR/$1.json"
+  local colors_sh="$SKETCHYBAR_COLORS"
+  [ ! -f "$colors_sh" ] && return 0
+
+  # Read palette and convert to sketchybar hex format (0xffRRGGBB)
+  local bg fg red green blue yellow magenta teal surface0 surface1 overlay base mantle crust
+  bg=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['base'])")
+  fg=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['text'])")
+  red=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['red'])")
+  green=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['green'])")
+  yellow=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['yellow'])")
+  blue=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['blue'])")
+  magenta=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['mauve'])")
+  teal=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['teal'])")
+  orange=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['peach'])")
+  surface0=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['surface0'])")
+  surface1=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['surface1'])")
+  overlay=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['overlay0'])")
+  base=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['base'])")
+  mantle=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['mantle'])")
+  crust=$(python3 -c "import json; d=json.load(open('$theme_file')); print(d['crust'])")
+
+  hex() { echo "0xff$(echo $1 | tr -d '#')"; }
+
+  cat > "$colors_sh" << COLORSEOF
+#!/bin/bash
+
+# Catppuccin $(echo $1 | sed 's/catppuccin-//')
+export BLACK=$(hex $bg)
+export WHITE=$(hex $fg)
+export RED=$(hex $red)
+export GREEN=$(hex $green)
+export BLUE=$(hex $blue)
+export YELLOW=$(hex $yellow)
+export ORANGE=$(hex $orange)
+export MAGENTA=$(hex $magenta)
+export TEAL=$(hex $teal)
+export SURFACE0=$(hex $surface0)
+export SURFACE1=$(hex $surface1)
+export OVERLAY=$(hex $overlay)
+export BASE=$(hex $base)
+export MANTLE=$(hex $mantle)
+export CRUST=$(hex $crust)
+COLORSEOF
+
+  chmod +x "$colors_sh"
+  # reload sketchybar if it's running
+  if pgrep -x sketchybar >/dev/null 2>&1; then
+    sketchybar --reload 2>/dev/null && echo "  • sketchybar: colors updated (reloaded)" || true
+  fi
+}
+
+switch_theme() {
+  local theme="$1"
+  local theme_file="$THEMES_DIR/$theme.json"
+
+  if [ ! -f "$theme_file" ]; then
+    echo "error: theme '$theme' not found (no $theme_file)"
+    echo ""
+    usage
+    exit 1
+  fi
+
+  echo "$theme" > "$CURRENT_FILE"
+  echo "switching to: $theme"
+  echo ""
+
+  apply_starship "$theme"
+  apply_kitty "$theme"
+  apply_nushell "$theme"
+  apply_sketchybar "$theme"
+
+  echo ""
+  echo "done."
+}
+
+case "${1:-}" in
+  ""|-h|--help)
+    usage
+    ;;
+  toggle)
+    current=$(cat "$CURRENT_FILE")
+    case "$current" in
+      catppuccin-mocha) target="catppuccin-latte" ;;
+      catppuccin-latte) target="catppuccin-mocha" ;;
+      *)
+        echo "error: unknown current theme '$current', defaulting to catppuccin-mocha"
+        target="catppuccin-mocha"
+        ;;
+    esac
+    switch_theme "$target"
+    ;;
+  *)
+    switch_theme "$1"
+    ;;
+esac

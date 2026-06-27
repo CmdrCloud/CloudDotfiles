@@ -47,3 +47,6 @@ alt - t: open -a "Kitty"
 alt - w: open -a "WhatsApp"
 alt - f: open -a "Firefox"
 alt - z: open -a "Zed"
+
+# --- THEME SWITCHER ---
+alt - x : $HOME/.config/theme-switcher/bin/theme-switch toggle

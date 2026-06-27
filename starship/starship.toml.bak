@@ -1,6 +1,6 @@
 add_newline = false
 format = """$directory$character"""
-palette = "catppuccin_mocha"
+palette = "catppuccin_latte"
 right_format = """$all"""
 command_timeout = 1000
 
